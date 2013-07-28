@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+* @package manifest file for Default Avatar
+* @version 1.4
+* @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* @copyright Copyright (c) 2012, Siddhartha Gupta
+* @license http://www.mozilla.org/MPL/MPL-1.1.html
+*/
+
+/*
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public License Version
+* 1.1 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Initial Developer of the Original Code is
+*  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* Portions created by the Initial Developer are Copyright (C) 2012
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+*/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+	<id>sid2varun:default_avatar<id>
+	<version>1.4</version>
+
+	<file name="$themedir/Display.template.php">
+		<operation>
+			<search position="after"><![CDATA[
+			// Show avatars, images, etc.?
+]]></search>
+			<add><![CDATA[
+			// Show Default avatar for Lazy members :D
+			if (!empty($modSettings['enable_default_avatar_post']) && empty($options['show_no_avatars']) && empty($message['member']['avatar']['image']))
+			echo '
+							<div style="overflow: auto; width: 100%;">
+									<img src="' . $settings['images_url'] . '/default_avatar.png"  alt="" border="0" />
+							</div>';
+
+]]></add>
+		</operation>
+	</file>	
+	
+	<file name="$themedir/PersonalMessage.template.php">
+		<operation>
+			<search position="after"><![CDATA[
+				// Show avatars, images, etc.?
+]]></search>
+			<add><![CDATA[
+			// Show Default avatar for Lazy members :D
+			if (!empty($modSettings['enable_default_avatar_pm']) && empty($options['show_no_avatars']) && empty($message['member']['avatar']['image']))
+			echo '
+							<div style="overflow: auto; width: 100%;">
+									<img src="' . $settings['images_url'] . '/default_avatar.png"  alt="" border="0" />
+							</div>';
+
+]]></add>
+		</operation>
+	</file>	
+	
+	<file name="$themedir/index.template.php">
+		<operation>
+			<search position="after"><![CDATA[	if (!empty($context['user']['avatar']))
+]]></search>
+			<add><![CDATA[
+			// Show Default avatar for Lazy members :D
+			if (!empty($modSettings['enable_default_avatar_head']) && empty($context['user']['avatar']))
+			echo '
+				<td class="windowbg" valign="middle">
+					<img src="' . $settings['images_url'] . '/default_avatar.png"  alt="" border="0" />
+				</td>';
+
+]]></add>
+		</operation>
+	</file>	
+	
+	<file name="$themedir/Profile.template.php">
+		<operation>
+			<search position="replace"><![CDATA[			', $context['member']['avatar']['image'], '<br /><br />
+]]></search>
+			<add><![CDATA[';
+			// Show Default avatar for Lazy members :D
+			if (!empty($modSettings['enable_default_avatar_profile']) && empty($context['member']['avatar']['image']))
+			echo '
+				<img src="' . $settings['images_url'] . '/default_avatar.png" /><br /><br />';
+			else
+			echo '			
+				', $context['member']['avatar']['image'], '<br /><br />';
+			echo '
+
+
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/ModSettings.php">
+		<operation>
+			<search position="before"><![CDATA[			array('check', 'who_enabled'),
+]]></search>
+			<add><![CDATA[		'',
+			array('check', 'enable_default_avatar_post'),
+			array('check', 'enable_default_avatar_pm'),
+			array('check', 'enable_default_avatar_profile'),
+			array('check', 'enable_default_avatar_head'),
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$languagedir/Modifications.english.php">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+$txt['enable_default_avatar_post'] = 'Enable Default Avatar in Posts';
+$txt['enable_default_avatar_pm'] = 'Enable Default Avatar in Personal Messages';
+$txt['enable_default_avatar_profile'] = 'Enable Default Avatar in Profile Summary';
+$txt['enable_default_avatar_head'] = 'Enable Default Avatar in Profile Header';
+]]></add>
+		</operation>
+	</file>
+
+	
+</modification>

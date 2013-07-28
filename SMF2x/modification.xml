@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+/**
+* @package manifest file for Default Avatar
+* @version 2.2
+* @author Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* @copyright Copyright (c) 2012, Siddhartha Gupta
+* @license http://www.mozilla.org/MPL/MPL-1.1.html
+*/
+
+/*
+* Version: MPL 1.1
+*
+* The contents of this file are subject to the Mozilla Public License Version
+* 1.1 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+* http://www.mozilla.org/MPL/
+*
+* Software distributed under the License is distributed on an "AS IS" basis,
+* WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+* for the specific language governing rights and limitations under the
+* License.
+*
+* The Initial Developer of the Original Code is
+*  Joker (http://www.simplemachines.org/community/index.php?action=profile;u=226111)
+* Portions created by the Initial Developer are Copyright (C) 2012
+* the Initial Developer. All Rights Reserved.
+*
+* Contributor(s):
+*
+*/
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+
+	<id>sid2varun:default_avatar<id>
+	<version>2.2</version>
+
+	<file name="$sourcedir/Load.php">
+			<operation>
+			<search position="before"><![CDATA[		'time_offset' => empty($user_settings['time_offset']) ? 0 : $user_settings['time_offset'],
+]]></search>
+			<add><![CDATA[		'gender' => empty($user_settings['gender']) ? '' : $user_settings['gender'],
+]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[	// Are we also loading the members custom fields into context?]]></search>
+			<add><![CDATA[
+	// Default avatar mod starts here.
+	if($memberContext[$user]['avatar']['image'] == '' && !empty($modSettings['enable_default_avatar']) && ($memberContext[$user]['gender']['name'] == $txt['male']) && !empty($modSettings['default_male_avatar_url']))
+		$memberContext[$user]['avatar'] = array(
+			'name' => '',
+			'image' => (($profile['is_online'] || empty($modSettings['default_avatar_opacity'])) ? '<img class="avatar" src="' . $modSettings['default_male_avatar_url'] . '" alt="" />' : '<img class="avatar" src="' . $modSettings['default_male_avatar_url'] . '" alt="" />'),
+			'href' => '',
+			'url' => '',
+		);
+	
+	elseif($memberContext[$user]['avatar']['image'] == '' && !empty($modSettings['enable_default_avatar']) && ($memberContext[$user]['gender']['name'] == $txt['female']) && !empty($modSettings['default_female_avatar_url']))
+		$memberContext[$user]['avatar'] = array(
+			'name' => '',
+			'image' => (($profile['is_online'] || empty($modSettings['default_avatar_opacity'])) ? '<img class="avatar" src="' . $modSettings['default_female_avatar_url'] . '" alt="" />' : '<img class="avatar_offline" src="' . $modSettings['default_female_avatar_url'] . '" alt="" />'),
+			'href' => '',
+			'url' => '',
+		);
+
+	elseif($memberContext[$user]['avatar']['image'] == '' && !empty($modSettings['enable_default_avatar']) && !empty($modSettings['default_avatar_url']))
+		$memberContext[$user]['avatar'] = array(
+			'name' => '',
+			'image' => (($profile['is_online'] || empty($modSettings['default_avatar_opacity'])) ? '<img class="avatar" src="' . $modSettings['default_avatar_url'] . '" alt="" />' : '<img class="avatar_offline" src="' . $modSettings['default_avatar_url'] . '" alt="" />'),
+			'href' => '',
+			'url' => '',
+		);
+
+	elseif($memberContext[$user]['avatar']['image'] == '' && !empty($modSettings['enable_default_avatar']))
+		$memberContext[$user]['avatar'] = array(
+		'name' => '',
+		'image' => (($profile['is_online'] || empty($modSettings['default_avatar_opacity'])) ? '<img class="avatar" src="' . $settings['default_images_url'] . '/default_avatar.png" alt="" />' : '<img class="avatar_offline" src="' . $settings['default_images_url'] . '/default_avatar.png" alt="" />'),
+		'href' => '',
+		'url' => '',
+		);
+	// Default avatar mod ends.
+
+]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[		'email' => $user_info['email'],
+]]></search>
+			<add><![CDATA[		'gender' => $user_info['gender'],
+]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[$context['html_headers'] = '';
+]]></search>
+			<add><![CDATA[
+	if(!empty($modSettings['default_avatar_opacity']))
+	{
+		$context['html_headers'] .= '
+		<style type="text/css">
+		.avatar_offline
+		{
+			filter:alpha(opacity=30);
+			-moz-opacity:0.3;
+			-khtml-opacity: 0.3;
+			opacity: 0.3;
+		}
+		</style>';
+	}
+
+]]></add>
+		</operation>
+	</file>	
+
+
+	<file name="$sourcedir/Subs.php">
+		<operation>
+			<search position="after"><![CDATA[		// Figure out how long they've been logged in.
+]]></search>
+			<add><![CDATA[
+		// Default avatar mod starts here.
+		if(empty($context['user']['avatar']['image']) && !empty($modSettings['enable_default_avatar']) && ($context['user']['gender'] == '1') && !empty($modSettings['default_male_avatar_url']))
+		$context['user']['avatar'] = array(
+			'name' => '',
+			'image' => '<img class="avatar" src="' . $modSettings['default_male_avatar_url'] . '" />',
+			'href' => '',
+			'url' => '',
+		);
+	
+		elseif(empty($context['user']['avatar']['image']) && !empty($modSettings['enable_default_avatar']) && ($context['user']['gender'] == '2') && !empty($modSettings['default_female_avatar_url']))
+		$context['user']['avatar'] = array(
+			'name' => '',
+			'image' => '<img class="avatar" src="' . $modSettings['default_female_avatar_url'] . '" />',
+			'href' => '',
+			'url' => '',
+		);
+
+		elseif(empty($context['user']['avatar']['image']) && !empty($modSettings['enable_default_avatar']) && !empty($modSettings['default_avatar_url']))
+			$context['user']['avatar'] = array(
+				'name' => '',
+				'image' => '<img class="avatar" src="' . $modSettings['default_avatar_url'] . '" />',
+				'href' => $modSettings['default_avatar_url'],
+				'url' => '',
+			);		
+
+		elseif(empty($context['user']['avatar']['image']) && !empty($modSettings['enable_default_avatar']))
+			$context['user']['avatar'] = array(
+				'name' => '',
+				'image' => '<img class="avatar" src="' . $settings['default_images_url'] . '/default_avatar.png" />',
+				'href' => '',
+				'url' => '',
+			);
+		// Default avatar mod ends.
+
+]]></add>
+		</operation>
+	</file>	
+
+	
+	<file name="$sourcedir/ManageSettings.php">
+		<operation>
+			<search position="before"><![CDATA[	$config_vars = array(
+		// Mod authors, add any settings UNDER this line. Include a comma at the end of the line and don't remove this statement!!
+]]></search>
+			<add><![CDATA[		array('check', 'enable_default_avatar'),
+		array('text', 'default_male_avatar_url'),
+		array('text', 'default_female_avatar_url'),
+		array('text', 'default_avatar_url', 'subtext' => $txt['default_avatar_path']),
+		array('check', 'default_avatar_opacity'),
+]]></add>
+		</operation>
+	</file>
+	
+
+	<file name="$languagedir/Modifications.english.php">
+		<operation>
+			<search position="end" />
+			<add><![CDATA[
+$txt['enable_default_avatar'] = 'Enable Default Avatar';
+$txt['default_male_avatar_url'] = 'Image path for Default Avatar image for male members';
+$txt['default_female_avatar_url'] = 'Image path for Default Avatar image for female members';
+$txt['default_avatar_url'] = 'Image path for Default Avatar image';
+$txt['default_avatar_path'] = '(If you haven\'t provide any url a default image will be shown)';
+$txt['default_avatar_opacity'] = 'Makes default avatars transparent when user logs out';
+]]></add>
+		</operation>
+	</file>
+
+	
+</modification>
