@@ -8,14 +8,18 @@
 	<type>modification</type>
 
 	<install for="2.0 - 2.0.99">
+		<code>install.php</code>
 		<readme parsebbc="true">readme.txt</readme>
+		<require-file name="DefaultAvatar.php" destination="$sourcedir">File to add hooks</require-file>
 		<modification>modification.xml</modification>
 		<require-file name="default_avatar.png" destination="$imagesdir" />
 		<redirect url="?action=admin;area=modsettings" type="inline">Please stand by while you are being redirected to this modification's configuration settings.</redirect>
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
+		<code>uninstall.php</code>
 		<modification reverse="true">modification.xml</modification>
+		<remove-file name="$sourcedir/DefaultAvatar.php" />
 		<remove-file name="$imagesdir/default_avatar.png" />
 		<redirect url="$scripturl?action=admin;area=packages;sa=browse" timeout="1000" />
 	</uninstall>

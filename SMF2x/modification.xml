@@ -51,7 +51,7 @@
 	if($memberContext[$user]['avatar']['image'] == '' && !empty($modSettings['enable_default_avatar']) && ($memberContext[$user]['gender']['name'] == $txt['male']) && !empty($modSettings['default_male_avatar_url']))
 		$memberContext[$user]['avatar'] = array(
 			'name' => '',
-			'image' => (($profile['is_online'] || empty($modSettings['default_avatar_opacity'])) ? '<img class="avatar" src="' . $modSettings['default_male_avatar_url'] . '" alt="" />' : '<img class="avatar" src="' . $modSettings['default_male_avatar_url'] . '" alt="" />'),
+			'image' => (($profile['is_online'] || empty($modSettings['default_avatar_opacity'])) ? '<img class="avatar" src="' . $modSettings['default_male_avatar_url'] . '" alt="" />' : '<img class="avatar_offline" src="' . $modSettings['default_male_avatar_url'] . '" alt="" />'),
 			'href' => '',
 			'url' => '',
 		);
@@ -176,9 +176,9 @@
 			<search position="end" />
 			<add><![CDATA[
 $txt['enable_default_avatar'] = 'Enable Default Avatar';
-$txt['default_male_avatar_url'] = 'Image path for Default Avatar image for male members';
-$txt['default_female_avatar_url'] = 'Image path for Default Avatar image for female members';
-$txt['default_avatar_url'] = 'Image path for Default Avatar image';
+$txt['default_male_avatar_url'] = 'Image url for Default Avatar image for male members';
+$txt['default_female_avatar_url'] = 'Image url for Default Avatar image for female members';
+$txt['default_avatar_url'] = 'Image url for Default Avatar image';
 $txt['default_avatar_path'] = '(If you haven\'t provide any url a default image will be shown)';
 $txt['default_avatar_opacity'] = 'Makes default avatars transparent when user logs out';
 ]]></add>
